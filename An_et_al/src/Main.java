@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Main {
@@ -10,9 +11,9 @@ public class Main {
 	// private static double[][] fixedCharge = MyArray.read("fixedcharge.txt");
 	private static double[][] coordinates = MyArray.read("coordinates.txt");
 	private static double[][] distances = Distance.get(coordinates);
-	private static int P = 6; // number of hubs to be located
+	private static int P = 4; // number of hubs to be located
 	private static double q = 0.05; // probability of a node being functional
-	private static int M = nVar * 4; // the big M
+//	private static int M = nVar * 4; // the big M
 	private static double Fmax;
 	private static double Qmax;
 	private static double rho = 1;
@@ -65,19 +66,20 @@ public class Main {
 			}
 		}
 		
-		PrintWriter output = new PrintWriter(new File("Model_An.txt"));
+		PrintWriter output = new PrintWriter(new File(/*"C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/model.lp"*/ "D:/model.lp"));
 				
 		/**
 		 * Objective Functions
 		 */
+		output.append("Minimize\n");
 		
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				for (int k=0;k<nVar;k++){
 					for (int m=0;m<nVar;m++){
 						if (k!=i && j!=m){
-							double coef = Fijkm(i, j, k, m)*flows[i][j]*(1-q-q(k, m));
-							output.append(" + " + coef + " x" + i +"_" + k + "_" + m + "_" + j + "\n");
+							double coef = Fijkm(i, k, m, j)*flows[i][j]*(1-q-q(k, m));
+							output.append(" + " + coef + " x" + i +"_" + k + "_" + m + "_" + j + " \n");
 						}
 					}
 				}
@@ -90,19 +92,19 @@ public class Main {
 				for (int m=0;m<nVar;m++){
 					if (m!=j){
 						double coef = Fijkm(i, i, m, j) * flows[i][j] * (1-q(i, m));
-						output.append(" + " + coef + " x" + i +"_" + i + "_" + m + "_" + j + "\n");
+						output.append(" + " + coef + " x" + i +"_" + i + "_" + m + "_" + j + " \n");
 					}
 				}
 				
 				for (int k=0;k<nVar;k++){
 					if (k!=i){
 						double coef = Fijkm(i, k, j, j) * flows[i][j] * (1-q(j, k));
-						output.append(" + " + coef + " x" + i +"_" + k + "_" + j + "_" + j + "\n");
+						output.append(" + " + coef + " x" + i +"_" + k + "_" + j + "_" + j + " \n");
 					}
 				}
 				
 				double coef = Fijkm(i, i, j, j) * flows[i][j] * q;
-				output.append(" + " + coef + " x" + i +"_" + i + "_" + j + "_" + j + "\n");
+				output.append(" + " + coef + " x" + i +"_" + i + "_" + j + "_" + j + " \n");
 				
 			}
 		}
@@ -110,7 +112,7 @@ public class Main {
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				for (int n=0;n<nVar;n++){
-					output.append(" + omega"+i+"_"+j+"_"+ n + " - " + sigma(i,j)+" U"+i+"_"+j+"_"+n+"\n");
+					output.append(" + omega"+i+"_"+j+"_"+ n + " - " + sigma(i,j) + " U"+i+"_"+j+"_"+n+" \n");
 				}				
 			}
 		}
@@ -118,7 +120,7 @@ public class Main {
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				for (int n=0;n<nVar;n++){
-					output.append(" + theta"+i+"_"+j+"_"+ n + " - " + sigma(i,j)+" V"+i+"_"+j+"_"+n+"\n");
+					output.append(" + theta"+i+"_"+j+"_"+ n + " - " + sigma(i,j) + " V" + i + "_" + j + "_" + n + " \n");
 				}				
 			}
 		}
@@ -126,7 +128,7 @@ public class Main {
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				for (int n=0;n<nVar;n++){
-					output.append(" + gamma"+i+"_"+j+"_"+ n + " - " + sigma(i,j)+" U"+i+"_"+j+"_"+n+"\n");
+					output.append(" + gamma"+i+"_"+j+"_"+ n + " - " + sigma(i,j)+" U"+i+"_"+j+"_"+n+" \n");
 				}				
 			}
 		}
@@ -142,7 +144,7 @@ public class Main {
 				for (int k=0;k<nVar;k++){
 					output.append(" + x"+i+"_"+k+"_"+j+"_"+j);
 				}
-				output.append(" = y"+j+"\n");
+				output.append(" - y"+j+" = 0\n");
 				
 			}
 		}
@@ -151,13 +153,12 @@ public class Main {
 		 * Constraint 20
 		 */
 		for (int i=0; i<nVar; i++){
-			for (int j=i+1; j<nVar;j++){
+			for (int j=i+1; j<nVar; j++){
 				
-				for (int k=0;k<nVar;k++){
-					output.append(" + x"+i+"_"+k+"_"+j+"_"+j);
+				for (int m=0; m<nVar; m++){
+					output.append(" + x" + i +"_"+ i +"_" + m + "_" + j);
 				}
-				output.append(" = y"+j+"\n");
-				
+				output.append(" - y"+i+" = 0\n");				
 			}
 		}
 		
@@ -167,7 +168,7 @@ public class Main {
 		for (int i=0;i<nVar;i++){
 			output.append(" + y"+i);
 		}
-		output.append(" = "+P+"\n");
+		output.append(" = "+P+" \n");
 		
 		/**
 		 * Constraint 22
@@ -175,6 +176,7 @@ public class Main {
 		
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
+				
 				for (int k=0;k<nVar;k++){
 					for (int m=0;m<nVar;m++){
 						output.append(" + x"+i+"_"+k+"_"+m+"_"+j);
@@ -190,11 +192,13 @@ public class Main {
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				for (int k=0;k<nVar;k++){
-					output.append(" + U"+i+"_"+j+"_"+k);
+					
+					output.append(" + U" + i + "_" + j + "_" + k);
 					for (int m=0;m<nVar;m++){
-						output.append(" + x"+i+"_"+k+"_"+m+"_"+j);
+						output.append(" + x" + i + "_" + k + "_" + m + "_" + j);
 					}
-					output.append(" <= y"+k+"\n");
+					output.append(" - y" + k + " <= 0\n");
+					
 				}
 			}
 		}
@@ -205,15 +209,14 @@ public class Main {
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				
-				for (int k=0;k<nVar;k++){
-					output.append(" + U"+i+"_"+j+"_"+k);
+				for (int k=0; k<nVar; k++){
+					output.append(" + U" + i + "_" + j + "_" + k);
 				}
 				
 				for (int m=0;m<nVar;m++){
 					output.append(" + x"+i+"_"+i+"_"+m+"_"+j);
 					output.append(" + x"+i+"_"+j+"_"+m+"_"+j);
-				}
-				
+				}				
 				output.append(" = 1\n");
 				
 			}
@@ -225,11 +228,12 @@ public class Main {
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				for (int m=0;m<nVar;m++){
+					
 					output.append(" + V"+i+"_"+j+"_"+m);
 					for (int k=0;k<nVar;k++){
 						output.append(" + x"+i+"_"+k+"_"+m+"_"+j);
 					}
-					output.append(" <= y"+m+"\n");
+					output.append(" - y"+m+" <= 0\n");
 				}
 			}
 		}
@@ -264,13 +268,14 @@ public class Main {
 					for (int k=0;k<nVar;k++){
 						for (int m=0;m<nVar;m++){
 							if (m!=k){
-								double coef = rho * flows[i][j] * q	*	Fijkm(i, n, m, j);
+								double coef = rho * flows[i][j] * q	* Fijkm(i, n, m, j);
 								output.append(" + " + coef + " x"+i+"_"+k+"_"+m+"_"+j);
 							}
 						}
 					}
 					output.append(" - s"+i+"_"+j+"_"+n);
 					output.append(" - omega"+i+"_"+j+"_"+n);
+					output.append(" = - " + sigma(i,j) + " \n");
 				}
 			}
 		}
@@ -284,7 +289,7 @@ public class Main {
 					double coef = miu(i,j) + sigma(i,j);
 					output.append(" + s"+i+"_"+j+"_"+n);
 					output.append(" + "+ coef+ " U"+i+"_"+j+"_"+n);
-					output.append(" <= "+coef+ "\n");
+					output.append(" <= "+coef+ " \n");
 				}
 			}
 		}
@@ -306,7 +311,7 @@ public class Main {
 					}
 					output.append(" - t"+i+"_"+j+"_"+n);
 					output.append(" - theta"+i+"_"+j+"_"+n);
-					output.append(" = - "+sigma(i,j)+ "\n");
+					output.append(" = - "+sigma(i,j)+ " \n");
 				}
 			}
 		}
@@ -320,7 +325,7 @@ public class Main {
 					double coef = miu(i,j) + sigma(i,j);
 					output.append(" + t"+i+"_"+j+"_"+n);
 					output.append(" + "+ coef+ " V"+i+"_"+j+"_"+n);
-					output.append(" <= "+coef+ "\n");
+					output.append(" <= "+coef+ " \n");
 				}
 			}
 		}
@@ -334,12 +339,11 @@ public class Main {
 				
 				for (int k=0;k<nVar;k++){
 					double coef = rho * flows[i][j] * q * Fijkm(i, n, n, j);
-					output.append(" + " + coef + "x" + i + "_" + k + "_" + k + "_" + j);
+					output.append(" + " + coef + " x" + i + "_" + k + "_" + k + "_" + j);
 				}
 				output.append(" - r"+ i +"_"+ j +"_"+ n );
-				output.append(" + " + sigma(i,j));
 				output.append(" - gamma"+i+"_"+j+"_"+ n );
-				output.append(" = 0\n");
+				output.append(" = - "+sigma(i,j)+ " \n");
 				}
 			}
 		}
@@ -353,7 +357,7 @@ public class Main {
 					double coef = miu(i,j) + sigma(i,j);
 					output.append(" + r"+i+"_"+j+"_"+n);
 					output.append(" + "+ coef+ " U"+i+"_"+j+"_"+n);
-					output.append(" <= "+coef+ "\n");
+					output.append(" <= "+coef+ " \n");
 				}
 			}
 		}
@@ -367,7 +371,7 @@ public class Main {
 			for (int j=i+1; j<nVar;j++){
 				for (int k=0;k<nVar;k++){
 					for (int m=0;m<nVar;m++){
-						output.append("x" + i + "_" + k + "_" + m + "_" + j + "\n");
+						output.append("x" + i + "_" + k + "_" + m + "_" + j + " \n");
 					}
 				}
 			}
@@ -376,14 +380,14 @@ public class Main {
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				for (int n=0 ; n<nVar ;n++){
-					output.append("U" + i + "_" + j + "_" + n + "\n");
-					output.append("V" + i + "_" + j + "_" + n + "\n");
+					output.append("U" + i + "_" + j + "_" + n + " \n");
+					output.append("V" + i + "_" + j + "_" + n + " \n");
 				}
 			}
 		}
 		
 		for (int i=0;i<nVar;i++){
-			 output.append("y" + i + "\n");
+			 output.append("y" + i + " \n");
 		}
 		
 		
@@ -391,10 +395,22 @@ public class Main {
 		System.out.println("done!");
 		
 		// Solve the model
-		ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start",
+		/*ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start",
 				 "C:/gurobi603/win64/bin/gurobi_cl",
-				 "ResultFile=C:/Users/PB/git/RpHLP_LP/RpHLP_LP/ModelAndResults/Results.sol"
-				 ,"C:/Users/PB/git/RpHLP_LP/RpHLP_LP/ModelAndResults/model.lp");
+				 "ResultFile = C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/Results.sol"
+				 ,"C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/model.lp");*/
+		
+		ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start"
+				 , "C:/gurobi603/win64/bin/gurobi_cl"
+				 , "ResultFile=D:/Results.sol"
+				 , "D:/model.lp");
+		
+		try {
+			 pb.start();
+			 } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }
