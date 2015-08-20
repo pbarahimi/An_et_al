@@ -11,18 +11,18 @@ public class Main {
 	// private static double[][] fixedCharge = MyArray.read("fixedcharge.txt");
 	private static double[][] coordinates = MyArray.read("coordinates.txt");
 	private static double[][] distances = Distance.get(coordinates);
-	private static int P = 4; // number of hubs to be located
-	private static double q = 0.05; // probability of a node being functional
+	private static int P = 3; // number of hubs to be located
+	private static double q = 0.05; // probability of a node being disrupted
 //	private static int M = nVar * 4; // the big M
-	private static double Fmax;
 	private static double Qmax;
 	private static double rho = 1;
 
 	/** qkm */
 	private static double q(int k, int m) {
-		double output = q;
-
-		return output;
+		if (m==k)
+			return 0;
+		else 
+			return q;
 	}
 	
 	/** Fikmj */
@@ -39,25 +39,36 @@ public class Main {
 	
 	/** miu */
 	private static double miu(int i, int j){
-		double output = rho * flows[i][j] * Fmax * Qmax;
+		double output = rho * flows[i][j] * Fmax(i,j) * Qmax;
 		return output;
 	}
 
+	/** Fmax
+	 * 
+	 * @param i
+	 * @param j
+	 * @return
+	 */
+	private static double Fmax(int i, int j){
+		double y=0;
+		for (int k=0;k<nVar;k++){
+			for (int m=0;m<nVar;m++){
+				double cost = Fijkm(i, k, m, j);
+				if (y<cost)
+					y=cost;
+			}
+		}
+		return y;
+	}
+	
+	/** Main
+	 * 
+	 * @param arg
+	 * @throws FileNotFoundException
+	 */
 	public static void main(String[] arg) throws FileNotFoundException{
 		
 		Qmax = q;
-		Fmax = 0;
-		for (int i=0; i<nVar; i++){
-			for (int j=i+1; j<nVar;j++){
-				for (int k=0;k<nVar;k++){
-					for (int m=0;m<nVar;m++){
-						if (Fijkm(i, k, m, j)>Fmax)
-							Fmax = Fijkm(i, k, m, j);							
-					}
-				}
-			}
-		}
-		System.out.println("Fmax = "+Fmax);
 		
 		/** Filling in the flows matrix assymetrically */
 		for (int i = 0; i < nVar; i++) {
@@ -103,7 +114,7 @@ public class Main {
 					}
 				}
 				
-				double coef = Fijkm(i, i, j, j) * flows[i][j] * q;
+				double coef = Fijkm(i, i, j, j) * flows[i][j];
 				output.append(" + " + coef + " x" + i +"_" + i + "_" + j + "_" + j + " \n");
 				
 			}
@@ -303,7 +314,7 @@ public class Main {
 					
 					for (int k=0;k<nVar;k++){
 						for (int m=0;m<nVar;m++){
-							if (n!=k){
+							if (m!=k){
 								double coef = rho * flows[i][j] * q	* Fijkm(i, k, n, j);
 								output.append(" + " + coef + " x"+i+"_"+k+"_"+m+"_"+j);
 							}
