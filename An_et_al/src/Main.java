@@ -11,7 +11,7 @@ public class Main {
 	// private static double[][] fixedCharge = MyArray.read("fixedcharge.txt");
 	private static double[][] coordinates = MyArray.read("coordinates.txt");
 	private static double[][] distances = Distance.get(coordinates);
-	private static int P = 3; // number of hubs to be located
+	private static int P = 4; // number of hubs to be located
 	private static double q = 0.05; // probability of a node being disrupted
 //	private static int M = nVar * 4; // the big M
 	private static double Qmax;
@@ -116,7 +116,6 @@ public class Main {
 				
 				double coef = Fijkm(i, i, j, j) * flows[i][j];
 				output.append(" + " + coef + " x" + i +"_" + i + "_" + j + "_" + j + " \n");
-				
 			}
 		}
 		
@@ -139,7 +138,7 @@ public class Main {
 		for (int i=0; i<nVar; i++){
 			for (int j=i+1; j<nVar;j++){
 				for (int n=0;n<nVar;n++){
-					output.append(" + gamma"+i+"_"+j+"_"+ n + " - " + sigma(i,j)+" U"+i+"_"+j+"_"+n+" \n");
+					output.append(" + 2 gamma"+i+"_"+j+"_"+ n + " - " + sigma(i,j)+" U"+i+"_"+j+"_"+n+" \n");
 				}				
 			}
 		}
