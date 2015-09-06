@@ -410,7 +410,7 @@ public class Main {
 				 "ResultFile = C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/Results.sol"
 				 ,"C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/model.lp");*/
 		
-		ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start"
+		/*ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start"
 				 , "C:/gurobi603/win64/bin/gurobi_cl"
 				 , "ResultFile=D:/Results.sol"
 				 , "D:/model.lp");
@@ -420,7 +420,7 @@ public class Main {
 			 } catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 }
