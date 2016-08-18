@@ -1,0 +1,134 @@
+
+Gurobi 6.0.5 (win64) logging started 08/17/16 16:49:58
+
+
+Gurobi Optimizer version 6.0.5 build v6.0.5rc1 (win64)
+Copyright (c) 2015, Gurobi Optimization, Inc.
+
+
+ERROR 10003: Unable to open file 'model222.lp' for input
+
+
+Gurobi 6.0.5 (win64) logging started 08/17/16 16:50:07
+
+
+Gurobi Optimizer version 6.0.5 build v6.0.5rc1 (win64)
+Copyright (c) 2015, Gurobi Optimization, Inc.
+
+Read LP format model from file model.lp
+Reading time = 0.01 seconds
+(null): 451 rows, 655 columns, 4225 nonzeros
+Optimize a model with 451 rows, 655 columns and 4225 nonzeros
+Coefficient statistics:
+  Matrix range    [1e+00, 2e+01]
+  Objective range [1e+00, 4e+02]
+  Bounds range    [1e+00, 1e+00]
+  RHS range       [1e+00, 2e+01]
+Found heuristic solution: objective 2024.81
+Presolve removed 50 rows and 230 columns
+Presolve time: 0.03s
+Presolved: 401 rows, 425 columns, 2025 nonzeros
+Variable types: 250 continuous, 175 integer (175 binary)
+
+Root relaxation: objective 7.949120e+02, 84 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  794.91204    0    4 2024.80809  794.91204  60.7%     -    0s
+H    0     0                     807.0799999  794.91204  1.51%     -    0s
+     0     0  804.43317    0    4  807.08000  804.43317  0.33%     -    0s
+H    0     0                     806.4653248  804.43317  0.25%     -    0s
+     0     0  804.43317    0    4  806.46532  804.43317  0.25%     -    0s
+
+Cutting planes:
+  Gomory: 2
+  Implied bound: 2
+
+Explored 0 nodes (110 simplex iterations) in 0.07 seconds
+Thread count was 2 (of 4 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 8.064653247726e+02, best bound 8.064653247726e+02, gap 0.0%
+
+Wrote result file 'results.sol'
+
+
+Gurobi 6.0.5 (win64) logging started 08/17/16 16:55:56
+
+
+Gurobi Optimizer version 6.0.5 build v6.0.5rc1 (win64)
+Copyright (c) 2015, Gurobi Optimization, Inc.
+
+Read LP format model from file model.lp
+Reading time = 0.01 seconds
+(null): 451 rows, 655 columns, 4225 nonzeros
+Optimize a model with 451 rows, 655 columns and 4225 nonzeros
+Coefficient statistics:
+  Matrix range    [1e+00, 2e+01]
+  Objective range [1e+00, 4e+02]
+  Bounds range    [1e+00, 1e+00]
+  RHS range       [1e+00, 2e+01]
+Found heuristic solution: objective 2125.54
+Presolve removed 50 rows and 140 columns
+Presolve time: 0.02s
+Presolved: 401 rows, 515 columns, 3045 nonzeros
+Variable types: 250 continuous, 265 integer (265 binary)
+
+Root relaxation: objective 8.642944e+02, 122 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0  864.29445    0   68 2125.54180  864.29445  59.3%     -    0s
+H    0     0                    1297.8328182  864.29445  33.4%     -    0s
+     0     0  866.63408    0   83 1297.83282  866.63408  33.2%     -    0s
+H    0     0                    1294.2365689  866.63408  33.0%     -    0s
+     0     0  871.91957    0   67 1294.23657  871.91957  32.6%     -    0s
+H    0     0                     990.0203514  871.91957  11.9%     -    0s
+     0     0  874.39743    0  105  990.02035  874.39743  11.7%     -    0s
+     0     0  876.23600    0  108  990.02035  876.23600  11.5%     -    0s
+     0     0  876.45505    0   64  990.02035  876.45505  11.5%     -    0s
+     0     0  876.72273    0  104  990.02035  876.72273  11.4%     -    0s
+     0     0  876.74197    0  110  990.02035  876.74197  11.4%     -    0s
+     0     0  876.74611    0  111  990.02035  876.74611  11.4%     -    0s
+     0     0  876.74611    0  111  990.02035  876.74611  11.4%     -    0s
+     0     0  876.74611    0   70  990.02035  876.74611  11.4%     -    0s
+H    0     0                     966.8632848  876.74611  9.32%     -    0s
+     0     0  877.50982    0  123  966.86328  877.50982  9.24%     -    0s
+     0     0  880.53817    0  117  966.86328  880.53817  8.93%     -    0s
+     0     0  882.56567    0  128  966.86328  882.56567  8.72%     -    0s
+     0     0  882.96421    0  132  966.86328  882.96421  8.68%     -    0s
+     0     0  883.79421    0  134  966.86328  883.79421  8.59%     -    0s
+     0     0  884.36755    0  133  966.86328  884.36755  8.53%     -    0s
+     0     0  884.82386    0  127  966.86328  884.82386  8.49%     -    0s
+     0     0  885.21978    0  130  966.86328  885.21978  8.44%     -    0s
+     0     0  885.34047    0  133  966.86328  885.34047  8.43%     -    0s
+     0     0  885.41309    0  129  966.86328  885.41309  8.42%     -    0s
+     0     0  885.69674    0  125  966.86328  885.69674  8.39%     -    0s
+H    0     0                     907.4888048  885.69674  2.40%     -    0s
+     0     0  885.78634    0  123  907.48880  885.78634  2.39%     -    0s
+     0     0  885.78948    0  123  907.48880  885.78948  2.39%     -    0s
+     0     0  885.78948    0  123  907.48880  885.78948  2.39%     -    0s
+     0     0  885.78948    0  105  907.48880  885.78948  2.39%     -    0s
+H    0     0                     904.5367877  885.78948  2.07%     -    0s
+     0     0  896.33787    0   52  904.53679  896.33787  0.91%     -    0s
+H    0     0                     900.2850394  896.33787  0.44%     -    0s
+*    0     0               0     899.4578169  899.45782  0.00%     -    0s
+
+Cutting planes:
+  Gomory: 9
+  Implied bound: 9
+  Clique: 119
+  MIR: 15
+  Zero half: 6
+  Mod-K: 2
+
+Explored 0 nodes (1094 simplex iterations) in 0.53 seconds
+Thread count was 2 (of 4 available processors)
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 8.994578168621e+02, best bound 8.994578168621e+02, gap 0.0%
+
+Wrote result file 'results.sol'
+

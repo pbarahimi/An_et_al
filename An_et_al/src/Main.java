@@ -11,7 +11,7 @@ public class Main {
 	// private static double[][] fixedCharge = MyArray.read("fixedcharge.txt");
 	private static double[][] coordinates = MyArray.read("coordinates.txt");
 	private static double[][] distances = Distance.get(coordinates);
-	private static int P = 4; // number of hubs to be located
+	private static int P = 3; // number of hubs to be located
 	private static double q = 0.05; // probability of a node being disrupted
 //	private static int M = nVar * 4; // the big M
 	private static double Qmax;
@@ -77,7 +77,7 @@ public class Main {
 			}
 		}
 		
-		PrintWriter output = new PrintWriter(new File(/*"C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/model.lp"*/ "D:/model.lp"));
+		PrintWriter output = new PrintWriter(new File("C:/Users/Pouya/git/An_et_al/An_et_al/ModelAndResults/model.lp"));
 				
 		/**
 		 * Objective Functions
@@ -406,11 +406,11 @@ public class Main {
 		
 		// Solve the model
 		/*ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start",
-				 "C:/gurobi603/win64/bin/gurobi_cl",
-				 "ResultFile = C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/Results.sol"
-				 ,"C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/model.lp");*/
+				 "gurobi_cl",
+				 "ResultFile = C:/Users/Pouya/git/An_et_al/An_et_al/ModelAndResults/Results222.sol"
+				 ,"C:/Users/Pouya/git/An_et_al/An_et_al/ModelAndResults/model222.lp");
 		
-		/*ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start"
+		ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start"
 				 , "C:/gurobi603/win64/bin/gurobi_cl"
 				 , "ResultFile=D:/Results.sol"
 				 , "D:/model.lp");
