@@ -110,7 +110,7 @@ public class An_et_al_main {
 		/**
 		 * Constraint 19
 		 */
-		for (int i=0; i<nVar; i++){
+		for (int i=0; i<nVar; i++){ 
 			for (int j=i+1; j<nVar;j++){
 				
 				for (int k=0;k<nVar;k++){
