@@ -1,21 +1,16 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 
-import An_et_al.model.Distance;
-
 public class An_et_al_main {
-	private static double alpha = 0.2;
-	private static double[][] tmpFlows = MyArray.read("w.txt");
-	private static double[][] q = MyArray.read("failures.txt");
-	private static int nVar = tmpFlows.length;
-	private static double[][] flows = new double[nVar][nVar];
-	 private static double[][] fixedCharge = MyArray.read("fixedcharge.txt");
-	private static double[][] coordinates = MyArray.read("coordinates.txt");
-	private static double[][] distances = Distance.get(coordinates);
-	private static int P = 3; // number of hubs to be located
-//	private static double q = 0.05; // probability of a node being disrupted
-//	private static int M = nVar * 4; // the big M
+	private static double alpha;
+	private static double[][] fixedCharge;
+	private static double[][] q;
+	private static int nVar;
+	private static double[][] flows;
+	private static int P;
+	private static double[][] distances;
 	private static double Qmax;
 	private static double rho = 1;
 
@@ -23,19 +18,66 @@ public class An_et_al_main {
 	 * 
 	 * @param arg
 	 * @throws FileNotFoundException
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] arg) throws FileNotFoundException{
+	public static void main(String[] arg) throws FileNotFoundException, InterruptedException{
+		
+		int[] N = {10,15};
+		int[] hub = {3,5,7};
+		double[] discount = {0.2};
+		String[] failure = {
+				"01-05",
+				"05-10",
+				"10-15",
+				"15-20",
+				"20-25",
+				"01-10",
+				"01-15",
+				"01-20",
+				"01-25"				
+		};
+		
+		for(int n : N){
+			for (int h : hub){
+				for (double d : discount){
+					for (String s:failure){
+//						run(n, h, d, s);	
+					}
+				}
+			}
+		}
+		
+		run(15, 5, 0.2, "01-20");
+	}
+
+	/**
+	 * 
+	 * @param N
+	 * @param hubs
+	 * @param discount
+	 * @param failure
+	 * @throws InterruptedException
+	 * @throws FileNotFoundException
+	 */
+	private static void run(int N, int hubs, double discount, String failure ) throws InterruptedException, FileNotFoundException{
+		alpha = discount;
+		fixedCharge = MyArray.read("Datasets/CAB/CAB" + N + "/fixedcharge.txt");
+		q = MyArray.read("Datasets/CAB/Failures/" + failure + "/failures.txt");
+		nVar = fixedCharge.length;
+		flows = MyArray.read("Datasets/CAB/CAB" + N + "/Flows.txt");
+		distances = MyArray.read("Datasets/CAB/CAB" + N + "/Distances.txt");
+		P = hubs; // number of hubs to be located
 		
 		Qmax = getQmax();
 		
 		/** Filling in the flows matrix assymetrically */
-		for (int i = 0; i < nVar; i++) {
-			for (int j = 0; j < nVar; j++) {
-				flows[i][j] = tmpFlows[i][j] + tmpFlows[j][i];
-			}
-		}
+//		for (int i = 0; i < nVar; i++) {
+//			for (int j = 0; j < nVar; j++) {
+//				flows[i][j] = tmpFlows[i][j] + tmpFlows[j][i];
+//			}
+//		}
 		
-		PrintWriter output = new PrintWriter(new File("D:/model.lp"));
+		PrintWriter output = new PrintWriter(new File("D:/model_" + N + "_" + hubs + "_" + discount + "_" + failure + ".lp"));
 				
 		/**
 		 * Objective Functions
@@ -101,9 +143,9 @@ public class An_et_al_main {
 			}
 		}
 		
-		for (int i = 0 ; i <nVar ; i++){
+		/*for (int i = 0 ; i <nVar ; i++){
 			output.append(" + " + fixedCharge[i][0] + " y" + i + " \n");
-		}
+		}*/
 	
 		output.append("Subject to\n");
 		
@@ -364,29 +406,20 @@ public class An_et_al_main {
 		
 		
 		output.close();
-		System.out.println("done!");
+		System.out.println("Model built.");
 		
-		
-		// Solve the model
-		/*ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start",
-				 "C:/gurobi603/win64/bin/gurobi_cl",
-				 "ResultFile = C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/Results.sol"
-				 ,"C:/Users/PB/git/An_et_al/An_et_al/ModelAndResults/model.lp");*/
-		
-		/*ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start"
-				 , "C:/gurobi603/win64/bin/gurobi_cl"
-				 , "ResultFile=D:/Results.sol"
-				 , "D:/model.lp");
+		ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "start"
+				 , "gurobi_cl"
+				 , "ResultFile=D:/Results_" + N + "_" + hubs + "_" + discount + "_" + failure + ".sol"
+				 , "D:/model_" + N + "_" + hubs + "_" + discount + "_" + failure + ".lp");
 		
 		try {
-			 pb.start();
+			 pb.start().waitFor();
 			 } catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
-		
+		}
 	}
-
 	/** qkm */
 	private static double q(int k, int m) {
 		if (m==k)
