@@ -22,8 +22,8 @@ public class An_et_al_main {
 	 */
 	public static void main(String[] arg) throws FileNotFoundException, InterruptedException{
 		
-		int[] N = {10,15};
-		int[] hub = {3,5,7};
+		int[] N = {10};
+		int[] hub = {3};
 		double[] discount = {0.2};
 		String[] failure = {
 				"01-05",
@@ -37,17 +37,17 @@ public class An_et_al_main {
 				"01-25"				
 		};
 		
-		for(int n : N){
-			for (int h : hub){
-				for (double d : discount){
-					for (String s:failure){
+//		for(int n : N){
+//			for (int h : hub){
+//				for (double d : discount){
+//					for (String s:failure){
 //						run(n, h, d, s);	
-					}
-				}
-			}
-		}
+//					}
+//				}
+//			}
+//		}
 		
-		run(15, 5, 0.2, "01-20");
+		run(10,4, 0.2, "01-20");
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class An_et_al_main {
 	private static void run(int N, int hubs, double discount, String failure ) throws InterruptedException, FileNotFoundException{
 		alpha = discount;
 		fixedCharge = MyArray.read("Datasets/CAB/CAB" + N + "/fixedcharge.txt");
-		q = MyArray.read("Datasets/CAB/Failures/" + failure + "/failures.txt");
+		q = MyArray.read("Datasets/An_Failures/failures.txt");
 		nVar = fixedCharge.length;
 		flows = MyArray.read("Datasets/CAB/CAB" + N + "/Flows.txt");
 		distances = MyArray.read("Datasets/CAB/CAB" + N + "/Distances.txt");
